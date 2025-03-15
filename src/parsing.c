@@ -6,7 +6,7 @@
 /*   By: ilallali <ilallali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 01:46:55 by ilallali          #+#    #+#             */
-/*   Updated: 2025/03/13 02:21:47 by ilallali         ###   ########.fr       */
+/*   Updated: 2025/03/15 00:54:11 by ilallali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	is_valid_integer(char *str)
 			check++;
 			str++;
 		}
+		if(*str == '+' || *str == '-')
+			str++;
 		if (!ft_isdigit(*str))
 			return (0);
 		str++;
@@ -68,8 +70,10 @@ int	pars_args(char *s1, char *s2)
 		return (0);
 	if (!is_valid_integer(s2))
 		return (0);
-	ft_atof(s1, &error);
-	ft_atof(s2, &error);
+	if (ft_atof(s1, &error) > 2 || ft_atof(s1, &error) < -2)
+		return (0);
+	if (ft_atof(s2, &error) > 2 || ft_atof(s2, &error) < -2)
+		return (0);
 	if (!error)
 		return (0);
 	return (1);

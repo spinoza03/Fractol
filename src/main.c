@@ -6,7 +6,7 @@
 /*   By: ilallali <ilallali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 23:01:05 by ilallali          #+#    #+#             */
-/*   Updated: 2025/03/13 01:41:00 by ilallali         ###   ########.fr       */
+/*   Updated: 2025/03/14 17:05:17 by ilallali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ int	main (int ac, char **av)
 		}
 		else
 			printf("fretiha\n");
-	}	
+	}
+	else
+		printf("fretiha\n");
 }
