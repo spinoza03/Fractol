@@ -3,25 +3,22 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = fractol
 
-SRC = src/main.c src/parsing.c funct/ft_atoi.c funct/ft_strcmp.c
+SRC =  src/parsing.c src/init.c funct/ft_atoi.c funct/ft_strcmp.c 
 
-OBJ = ${SRC:.c=.o}
-HEADER = includes/fractol.h
+OBJ = $(SRC:.c=.o)
 
-all: ${NAME}
+all : $(NAME)
 
-${NAME}: ${OBJ}
-	${CC} ${CFLAGS} ${OBJ} -o ${NAME}
+$(NAME): src/main.c $(OBJ)
+	cc -Wall -Wextra -Werror $^ -Lmlx/ -lm -lmlx -lX11 -lXext -o $@
 
-%.o: %.c ${HEADER}
-	${CC} ${CFLAGS} -I includes -c $< -o $@
+$(OBJ) : %.o: %.c include/fractol.h
+	cc -Wall -Wextra -Werror -c $< -o $@
 
 clean:
-	rm -f ${OBJ}
+	rm -f $(OBJ)
 
 fclean: clean
-	rm -f ${NAME}
+	rm -f $(NAME)
 
-re: fclean all
-
-.PHONY: clean
+re : fclean all

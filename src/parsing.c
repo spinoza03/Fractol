@@ -6,7 +6,7 @@
 /*   By: ilallali <ilallali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 01:46:55 by ilallali          #+#    #+#             */
-/*   Updated: 2025/03/15 00:54:11 by ilallali         ###   ########.fr       */
+/*   Updated: 2025/03/18 16:23:26 by ilallali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,8 @@ int	is_valid_integer(char *str)
 			return (0);
 		str++;
 	}
-	if (!check_other(str))
+	if (!check_other(str) || check > 1)
 		return (0);
-	if (check != 1)
-		return(0);
 	return (1);
 }
 
