@@ -1,19 +1,19 @@
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = 
 NAME = fractol
 
-SRC =  src/parsing.c src/init.c funct/ft_atoi.c funct/ft_strcmp.c 
+SRC = src/test.c
 
 OBJ = $(SRC:.c=.o)
 
 all : $(NAME)
 
-$(NAME): src/main.c $(OBJ)
-	cc -Wall -Wextra -Werror $^ -Lmlx/ -lm -lmlx -lX11 -lXext -o $@
+$(NAME): $(OBJ)
+	cc ${CFLAGS} $^ -Lmlx/ -lm -lmlx -lX11 -lXext -o $@
 
 $(OBJ) : %.o: %.c include/fractol.h
-	cc -Wall -Wextra -Werror -c $< -o $@
+	cc ${CFLAGS} -c $< -o $@
 
 clean:
 	rm -f $(OBJ)

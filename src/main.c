@@ -6,17 +6,15 @@
 /*   By: ilallali <ilallali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 23:01:05 by ilallali          #+#    #+#             */
-/*   Updated: 2025/03/18 16:19:36 by ilallali         ###   ########.fr       */
+/*   Updated: 2025/03/18 23:59:26 by ilallali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-#include "../include/fractol.h"
-
 int	main(int ac, char **av)
 {
-	t_fractal	fractol;
+	t_fractol	fractol;
 	double		real, imag;
 
 	if (ac == 2 && ft_strcmp(av[1], "mandelbrot") == 0)
