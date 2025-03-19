@@ -6,7 +6,7 @@
 /*   By: ilallali <ilallali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 01:38:05 by ilallali          #+#    #+#             */
-/*   Updated: 2025/03/18 23:59:09 by ilallali         ###   ########.fr       */
+/*   Updated: 2025/03/19 00:21:39 by ilallali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_img_data
 typedef struct s_fractol
 {
 	double		zoom;
+	void		*mlx;
 	void		*mlx_init_ptr;
 	void		*mlx_win_ptr;
 	char		*title;
