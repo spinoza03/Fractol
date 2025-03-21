@@ -1,9 +1,11 @@
 
 CC = cc
-CFLAGS = 
+CFLAGS = -Wall -Wextra -Werror
 NAME = fractol
 
-SRC = src/test.c
+SRC = src/init.c src/main.c src/parsing.c src/mandelbrot.c \
+		src/julia.c funct/ft_atoi.c funct/ft_strcmp.c funct/putstr_fd.c \
+		src/controls.c
 
 OBJ = $(SRC:.c=.o)
 

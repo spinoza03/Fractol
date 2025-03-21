@@ -5,46 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ilallali <ilallali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 23:47:35 by ilallali          #+#    #+#             */
-/*   Updated: 2025/03/18 23:47:46 by ilallali         ###   ########.fr       */
+/*   Created: 2025/03/21 15:34:38 by ilallali          #+#    #+#             */
+/*   Updated: 2025/03/21 16:32:21 by ilallali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-void	set_pixel_julia(t_fractol *f, int x, int y)
+static int	julia_iter(double z_real, double z_imag, double c_real, double c_imag, int iter_n)
 {
-	t_nbr_cmplx	z;
+	int		i;
+	double	temp;
 
-	// Convert pixel coordinates to complex plane coordinates
-	z.real = pix_cor_to_complexcor(x, f->x_start, f->x_end, WIDTH);
-	z.img = pix_cor_to_complexcor(y, f->y_start, f->y_end, HEIGHT);
-	
-	f->iter_n = 0;
-	while (f->iter_n < MAX_ITER)
+	i = 0;
+	while (i < iter_n && (z_real * z_real + z_imag * z_imag) <= 4)
 	{
-		z = sum_complex(pow_comp2(z), f->c_julia);
-		if ((z.real * z.real) + (z.img * z.img) > 4)
-		{
-			color(f, x, y, f->iter_n);
-			return;
-		}
-		f->iter_n++;
+		temp = z_real * z_real - z_imag * z_imag + c_real;
+		z_imag = 2 * z_real * z_imag + c_imag;
+		z_real = temp;
+		i++;
 	}
-	put_pixel(f, x, y, BLACK);
+	return (i);
 }
 
-void	julia(t_fractol *f)
+void	render_julia(t_fractol *f, double c_real, double c_imag)
 {
-	int	x, y;
+	int		x;
+	int		y;
+	double	z_real;
+	double	z_imag;
+	int		iter;
+	int		color;
 
-	zoom_init(f);  // Initialize zoom before drawing
-
-	for (y = 0; y < HEIGHT; y++)
+	f->iter_n = MAX_ITER * (1.0 / f->zoom);
+	if (f->iter_n < 30)
+		f->iter_n = 30;
+	y = 0;
+	while (y < HEIGHT)
 	{
-		for (x = 0; x < WIDTH; x++)
-			set_pixel_julia(f, x, y);
+		x = 0;
+		while (x < WIDTH)
+		{
+			z_real = f->x_start + (x / (double)WIDTH) * (f->x_end - f->x_start);
+			z_imag = f->y_start + (y / (double)HEIGHT) * (f->y_end - f->y_start);
+			iter = julia_iter(z_real, z_imag, c_real, c_imag, f->iter_n);
+			color = 0;
+			if (iter != f->iter_n)
+				color = (0xFFFFFF * iter) / f->iter_n;
+			*(int *)(f->img.pix_data + (y * f->img.line_len
+					+ x * (f->img.bit_pix / 8))) = color;
+			x++;
+		}
+		y++;
 	}
-
 	mlx_put_image_to_window(f->mlx_init_ptr, f->mlx_win_ptr, f->img.img_ptr, 0, 0);
 }

@@ -6,28 +6,45 @@
 /*   By: ilallali <ilallali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 01:38:05 by ilallali          #+#    #+#             */
-/*   Updated: 2025/03/19 00:21:39 by ilallali         ###   ########.fr       */
+/*   Updated: 2025/03/21 16:30:07 by ilallali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
+# include "../mlx/mlx.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
-#include "../mlx/mlx.h"
 
 # define HEIGHT	900
 # define WIDTH	900
 # define MAX_ITER 100
-# define BLACK 0x000000
+# define BLACK 0X000000
+
+# define ESC_KEY 53
+# define UP_KEY 126
+# define DOWN_KEY 125
+# define LEFT_KEY 123
+# define RIGHT_KEY 124
+# define ZOOM_IN 4
+# define ZOOM_OUT 5
+
+typedef struct s_check
+{
+	int	s;
+	int	non_true;
+	int	f;
+	int	digit;
+	int	prev;
+}	t_check;
 
 typedef struct s_nbr_cmplx
 {
 	double	real;
 	double	img;
-}	t_nbr_cmplx;
+}		t_nbr_cmplx;
 
 typedef struct s_img_data
 {
@@ -42,52 +59,31 @@ typedef struct s_img_data
 typedef struct s_fractol
 {
 	double		zoom;
-	void		*mlx;
 	void		*mlx_init_ptr;
 	void		*mlx_win_ptr;
 	char		*title;
 	int			iter_n;
+	int			fractal_type;
 	double		x_start;
 	double		x_end;
 	double		y_start;
 	double		y_end;
 	t_img_data	img;
-	t_nbr_cmplx	z;
 	t_nbr_cmplx	c_julia;
 }	t_fractol;
 
-/* Utility Functions */
-void		ft_put_err(char *str, int fd);
-double		ft_atod(char *str);
-int			ft_isspace(char *str);
-int			ft_nontrue(char *str);
-
-/* Initialization */
-void		fract_prep(t_fractol *fractol);
-void		window_create(t_fractol *f);
-void		image_create(t_fractol *f);
-void		event_init(t_fractol *f);
-
-/* Fractal Functions */
-void		mandelbrot(t_fractol *f);
-void		julia(t_fractol *f);
-void		set_pixel_julia(t_fractol *f, int x, int y);
-void		zoom_init(t_fractol *f);
-void		fract_create(t_fractol *f, char *str);
-
-/* Complex Number Operations */
-t_nbr_cmplx	sum_complex(t_nbr_cmplx z, t_nbr_cmplx c);
-t_nbr_cmplx	pow_comp2(t_nbr_cmplx z);
-double		pix_to_complex(double val, double min, double max, double range);
-
-/* Image Manipulation */
-void		color(t_fractol *f, int x, int y, int iter_n);
-void		put_pixel(t_fractol *f, int x, int y, int color);
-// Function prototypes
+void	put_pixel(t_fractol *f, int x, int y, int color);
+int	close_window(t_fractol *f);
+int	mouse_hook(int button, int x, int y, t_fractol *f);
+int	key_hook(int keycode, t_fractol *f);
+void	init_fractol(t_fractol *f, char *title);
+void	init_image(t_fractol *f);
 void	ft_putstr_fd(char *s, int fd);
-void	init_mlx(t_fractol *fractal);
+void	init_mlx(t_fractol *fractal, char *title);
 void	draw_fractal(t_fractol *fractal);
 int	ft_strcmp(char *s1, char *s2);
 int	pars_args(char *s1, char *s2);
 double	ft_atof(const char *str, int *error);
+void	render_julia(t_fractol *f, double c_real, double c_imag);
+void	render_mandelbrot(t_fractol *f);
 #endif

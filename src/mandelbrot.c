@@ -5,53 +5,57 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ilallali <ilallali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 00:01:14 by ilallali          #+#    #+#             */
-/*   Updated: 2025/03/19 00:13:45 by ilallali         ###   ########.fr       */
+/*   Created: 2025/03/21 02:33:59 by ilallali          #+#    #+#             */
+/*   Updated: 2025/03/21 16:19:34 by ilallali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-void	set_pixel_mandelbrot(t_fractol *f, int x, int y)
+static int	mandelbrot_iter(double real, double imag)
 {
-	t_nbr_cmplx	z;
-	t_nbr_cmplx	c;
+	int		i;
+	double	z_real;
+	double	z_imag;
+	double	temp;
 
-	z.real = 0.0;
-	z.img = 0.0;
-	f->iter_n = 0;
-	c.real = pix_to_complex(x, f->x_start, f->x_end, WIDTH);
-	c.img = pix_to_complex(y, f->y_start, f->y_end, HEIGHT);
-	while (f->iter_n < MAX_ITER)
+	z_real = 0;
+	z_imag = 0;
+	i = 0;
+	while (i < MAX_ITER && (z_real * z_real + z_imag * z_imag) <= 4)
 	{
-		z = sum_complex(pow_comp2(z), c);
-		if ((z.real * z.real) + (z.img * z.img) > 4)
-		{
-			color(f, x, y, f->iter_n);
-			return ;
-		}
-		f->iter_n++;
+		temp = z_real * z_real - z_imag * z_imag + real;
+		z_imag = 2 * z_real * z_imag + imag;
+		z_real = temp;
+		i++;
 	}
-	put_pixel(f, x, y, BLACK);
+	return (i);
 }
 
-void	mandelbrot(t_fractol *f)
+void	render_mandelbrot(t_fractol *f)
 {
-	int	x;
-	int	y;
+	int		x, y;
+	double	real, imag;
+	int		iter;
+	int		color;
 
 	y = 0;
-	zoom_init(f);
+	f->iter_n = MAX_ITER * (1 / f->zoom);
+	if (f->iter_n < 30)
+    	f->iter_n = 30;
 	while (y < HEIGHT)
 	{
 		x = 0;
 		while (x < WIDTH)
 		{
-			set_pixel_mandelbrot(f, x, y);
+			real = f->x_start + (x / (double)WIDTH) * (f->x_end - f->x_start);
+			imag = f->y_start + (y / (double)HEIGHT) * (f->y_end - f->y_start);
+			iter = mandelbrot_iter(real, imag);
+			color = (iter == MAX_ITER) ? BLACK : 0xFFFFFF * iter / MAX_ITER;
+			*(int *)(f->img.pix_data + (y * f->img.line_len + x * (f->img.bit_pix / 8))) = color;
 			x++;
 		}
 		y++;
 	}
-	mlx_put_image_to_window(f->mlx_init_ptr,
-		f->mlx_win_ptr, f->img.img_ptr, 0, 0);
+	mlx_put_image_to_window(f->mlx_init_ptr, f->mlx_win_ptr, f->img.img_ptr, 0, 0);
 }
